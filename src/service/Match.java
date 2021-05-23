@@ -1,6 +1,6 @@
 package service;
 
-import helper.Constants;
+import constants.Constants;
 import model.bowl.Ball;
 import model.bowl.BallFactory;
 import model.player.Player;
@@ -59,7 +59,8 @@ public class Match {
     }
 
     private void startNewOver() {
-        scorePrinter.printStartOfOver();
+        System.out.println("\nOver " + (matchHelper.getOversCompleted() + 1));
+        System.out.println("Bowlers Name:");
         String bowlerName = scanner.nextLine();
         bowler = bowlingTeam.getBowler(bowlerName);
         System.out.println("Over Input");
