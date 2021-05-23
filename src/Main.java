@@ -1,4 +1,5 @@
 import model.team.Team;
+import printer.ScorePrinter;
 import service.Match;
 
 import java.util.Scanner;
@@ -12,7 +13,7 @@ public class Main {
         int noOfOver = scanner.nextInt();
         Team team1 = new Team("1");
         Team team2 = new Team("2");
-        Match match = new Match();
+        Match match = new Match(new ScorePrinter());
 
         match.setMaxOversAllowed(noOfOver);
         match.setPlayersInEachTeam(noOfPlayers);

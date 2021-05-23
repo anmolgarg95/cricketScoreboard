@@ -6,8 +6,6 @@ import model.bowl.BallFactory;
 import model.player.Player;
 import model.team.Team;
 import printer.IPrinter;
-import printer.ScorePrinter;
-
 import java.util.Scanner;
 
 public class Match {
@@ -23,14 +21,18 @@ public class Match {
     private int currentInning = 1;
     private final IPrinter scorePrinter;
 
-    public Match() {
-        this.scorePrinter = new ScorePrinter(this);
+    private final MatchHelper matchHelper;
+
+    public Match(IPrinter printer) {
+        this.scorePrinter = printer;
+        this.scorePrinter.setMatch(this);
+        matchHelper = new MatchHelper(this);
     }
 
     public void startMatch() {
         while (currentInning <= 2) {
             startInning();
-            changeInnings();
+            this.matchHelper.changeInnings();
         }
         scorePrinter.printMatchResult();
     }
@@ -46,10 +48,10 @@ public class Match {
         }
         onStrikeBatsman = battingTeam.getNextBatsman();
         offStrikeBatsman = battingTeam.getNextBatsman();
-        while (!isInningEnd()) {
+        while (!matchHelper.isInningEnd()) {
             startNewOver();
-            if (!isInningEnd()) {
-                changeStrike();
+            if (!matchHelper.isInningEnd()) {
+                this.matchHelper.changeStrike();
             }
             scorePrinter.printBattingScoreCard();
             scorePrinter.printBowlingScoreCard();
@@ -57,54 +59,25 @@ public class Match {
     }
 
     private void startNewOver() {
-        System.out.println("Over " + (getOversBowled() + 1));
-        System.out.println("Bowlers Name:");
+        scorePrinter.printStartOfOver();
         String bowlerName = scanner.nextLine();
         bowler = bowlingTeam.getBowler(bowlerName);
         System.out.println("Over Input");
         int prevBallsPlayed = battingTeam.getTeamBattingStats().getBallsPlayed();
         int newBallsPlayed = battingTeam.getTeamBattingStats().getBallsPlayed();
-        while ((newBallsPlayed - prevBallsPlayed) < Constants.NUMBER_OF_BALLS_IN_OVER && !isInningEnd()) {
+        while ((newBallsPlayed - prevBallsPlayed) < Constants.NUMBER_OF_BALLS_IN_OVER
+                && !matchHelper.isInningEnd()) {
             Ball ball = getNewBall();
             ball.updateBattingScoreboard(battingTeam, onStrikeBatsman);
             ball.updateBowlingScoreboard(bowlingTeam, bowler);
             if (ball.isStrikeChangingBowl()) {
-                changeStrike();
+                this.matchHelper.changeStrike();
             }
             if (ball.isSendNextBatsman()) {
                 onStrikeBatsman = battingTeam.getNextBatsman();
             }
             newBallsPlayed = battingTeam.getTeamBattingStats().getBallsPlayed();
         }
-    }
-
-    private void changeStrike() {
-        Player temp = onStrikeBatsman;
-        onStrikeBatsman = offStrikeBatsman;
-        offStrikeBatsman = temp;
-    }
-
-    private void changeInnings() {
-        currentInning++;
-        Team temp = battingTeam;
-        battingTeam = bowlingTeam;
-        bowlingTeam = temp;
-    }
-
-    private boolean hasSecondBattingTeamWon() {
-        if (currentInning < 2)
-            return false;
-        return battingTeam.getTeamBattingStats().getTotalRunsScored() > bowlingTeam.getTeamBattingStats().getTotalRunsScored();
-    }
-
-    private int getOversBowled() {
-        return battingTeam.getTeamBattingStats().getBallsPlayed() / Constants.NUMBER_OF_BALLS_IN_OVER;
-    }
-
-    private boolean isInningEnd() {
-        return (battingTeam.getTeamBattingStats().getWicketsFallen() >= playersInEachTeam - 1) ||
-                getOversBowled() == maxOversAllowed ||
-                hasSecondBattingTeamWon();
     }
 
     private Ball getNewBall() {
@@ -139,9 +112,25 @@ public class Match {
         this.bowlingTeam = bowlingTeam;
     }
 
+    public void setOnStrikeBatsman(Player onStrikeBatsman) {
+        this.onStrikeBatsman = onStrikeBatsman;
+    }
+
+    public void setOffStrikeBatsman(Player offStrikeBatsman) {
+        this.offStrikeBatsman = offStrikeBatsman;
+    }
+
+    public void setCurrentInning(int currentInning) {
+        this.currentInning = currentInning;
+    }
+
     /**
      * Public getters
      **/
+    public int getMaxOversAllowed() {
+        return this.maxOversAllowed;
+    }
+
     public int getPlayersInEachTeam() {
         return playersInEachTeam;
     }
@@ -163,6 +152,11 @@ public class Match {
     }
 
     public int getCurrentInning() {
-        return currentInning;
+        return this.currentInning;
     }
+
+    public MatchHelper getMatchHelper() {
+        return matchHelper;
+    }
+
 }

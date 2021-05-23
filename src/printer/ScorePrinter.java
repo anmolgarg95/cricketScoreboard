@@ -11,8 +11,10 @@ import service.Match;
 import java.util.List;
 
 public class ScorePrinter implements IPrinter{
-    private final Match match;
-    public ScorePrinter(Match match){
+    private Match match;
+
+    @Override
+    public void setMatch(Match match) {
         this.match = match;
     }
 
@@ -46,6 +48,12 @@ public class ScorePrinter implements IPrinter{
                     convertToOvers(playerBowlingStats.getBallsBowled()),
                     playerBowlingStats.getWicketsTaken());
         }
+    }
+
+    @Override
+    public void printStartOfOver() {
+        System.out.println("\nOver " + (match.getMatchHelper().getOversCompleted() + 1));
+        System.out.println("Bowlers Name:");
     }
 
     @Override
