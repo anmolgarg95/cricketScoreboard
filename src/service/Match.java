@@ -1,9 +1,8 @@
 package service;
 
 import helper.Constants;
-import model.bowl.Ball;
-import model.bowl.BallFactory;
-import model.bowl.BallType;
+import bowl.Ball;
+import bowl.BallFactory;
 import model.player.Player;
 import model.team.Team;
 import printer.IPrinter;
@@ -20,6 +19,7 @@ public class Match {
     private Team bowlingTeam;
     private Player onStrikeBatsman;
     private Player offStrikeBatsman;
+    private Player bowler;
     private int currentInning = 1;
     private final IPrinter scorePrinter;
 
@@ -42,7 +42,7 @@ public class Match {
         System.out.println("Batting order for team" + battingTeam.getName());
         for (int i = 0; i < playersInEachTeam; ++i) {
             String playerName = scanner.nextLine();
-            battingTeam.addPlayer(playerName);
+            battingTeam.addBatsman(playerName);
         }
         onStrikeBatsman = battingTeam.getNextBatsman();
         offStrikeBatsman = battingTeam.getNextBatsman();
@@ -52,20 +52,26 @@ public class Match {
                 changeStrike();
             }
             scorePrinter.printBattingScoreCard();
+            scorePrinter.printBowlingScoreCard();
         }
     }
 
     private void startNewOver() {
         System.out.println("Over " + (getOversBowled() + 1));
+        System.out.println("Bowlers Name:");
+        String bowlerName = scanner.nextLine();
+        bowler = bowlingTeam.getBowler(bowlerName);
+        System.out.println("Over Input");
         int prevBallsPlayed = battingTeam.getTeamBattingStats().getBallsPlayed();
         int newBallsPlayed = battingTeam.getTeamBattingStats().getBallsPlayed();
         while ((newBallsPlayed - prevBallsPlayed) < Constants.NUMBER_OF_BALLS_IN_OVER && !isInningEnd()) {
             Ball ball = getNewBall();
-            battingTeam.getTeamBattingStats().update(onStrikeBatsman, ball);
+            ball.updateBattingScoreboard(battingTeam, onStrikeBatsman);
+            ball.updateBowlingScoreboard(bowlingTeam, bowler);
             if (ball.isStrikeChangingBowl()) {
                 changeStrike();
             }
-            if (BallType.WICKET.equals(ball.getBallType())) {
+            if (ball.isSendNextBatsman()) {
                 onStrikeBatsman = battingTeam.getNextBatsman();
             }
             newBallsPlayed = battingTeam.getTeamBattingStats().getBallsPlayed();

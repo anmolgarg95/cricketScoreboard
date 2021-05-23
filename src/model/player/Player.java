@@ -1,12 +1,14 @@
 package model.player;
 
 public class Player {
-    private String name;
-    private PlayerBattingStats playerBattingStats;
+    private final String name;
+    private final PlayerBattingStats playerBattingStats;
+    private final PlayerBowlingStats playerBowlingStats;
 
     public Player(String name){
         this.name = name;
         this.playerBattingStats = new PlayerBattingStats();
+        this.playerBowlingStats = new PlayerBowlingStats();
     }
 
     /**
@@ -18,6 +20,10 @@ public class Player {
 
     public PlayerBattingStats getBattingStats() {
         return playerBattingStats;
+    }
+
+    public PlayerBowlingStats getPlayerBowlingStats() {
+        return playerBowlingStats;
     }
 
 }
