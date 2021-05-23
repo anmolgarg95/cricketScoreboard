@@ -1,8 +1,8 @@
-package bowl;
+package model.bowl;
 
-import bowl.scoreboardupdatebehaviour.ExtrasScoreboardUpdateBehaviour;
-import bowl.scoreboardupdatebehaviour.RunScoreboardUpdateBehaviour;
-import bowl.scoreboardupdatebehaviour.WicketScoreboardUpdateBehaviour;
+import model.bowl.scoreboardupdatebehaviour.ExtrasScoreboardUpdateBehaviour;
+import model.bowl.scoreboardupdatebehaviour.RunScoreboardUpdateBehaviour;
+import model.bowl.scoreboardupdatebehaviour.WicketScoreboardUpdateBehaviour;
 
 public class BallFactory {
 

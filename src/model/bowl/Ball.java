@@ -1,6 +1,6 @@
-package bowl;
+package model.bowl;
 
-import bowl.scoreboardupdatebehaviour.IScoreboardUpdateBehaviour;
+import model.bowl.scoreboardupdatebehaviour.IScoreboardUpdateBehaviour;
 import model.player.Player;
 import model.team.Team;
 
@@ -8,10 +8,10 @@ public class Ball {
     private final int runs;
     private final boolean isStrikeChangingBowl;
     private final boolean sendNextBatsman;
-    private final IScoreboardUpdateBehaviour  scoreboardUpdateBehaviour;
+    private final IScoreboardUpdateBehaviour scoreboardUpdateBehaviour;
 
     public Ball(int runs, boolean isStrikeChangingBowl, boolean sendNextBatsman,
-                IScoreboardUpdateBehaviour scoreboardUpdateBehaviour){
+                IScoreboardUpdateBehaviour scoreboardUpdateBehaviour) {
         this.runs = runs;
         this.isStrikeChangingBowl = isStrikeChangingBowl;
         this.sendNextBatsman = sendNextBatsman;

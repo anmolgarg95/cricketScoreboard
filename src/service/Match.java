@@ -1,8 +1,8 @@
 package service;
 
 import helper.Constants;
-import bowl.Ball;
-import bowl.BallFactory;
+import model.bowl.Ball;
+import model.bowl.BallFactory;
 import model.player.Player;
 import model.team.Team;
 import printer.IPrinter;

@@ -1,4 +1,4 @@
-package bowl.scoreboardupdatebehaviour;
+package model.bowl.scoreboardupdatebehaviour;
 
 import model.player.Player;
 import model.team.Team;
